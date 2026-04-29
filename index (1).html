@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Web de Viajes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #f5ede0;
+    --terracota: #c0624a;
+    --deep: #1a1a2e;
+    --gold: #d4a847;
+    --mist: #e8ddd0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--sand);
+    color: var(--deep);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(245,237,224,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--mist);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--terracota);
+    letter-spacing: 1px;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--deep);
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--terracota); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 70px;
+  }
+  .hero-text {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 4rem 3rem 4rem 4rem;
+    animation: fadeUp 1s ease both;
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--terracota);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em { color: var(--terracota); font-style: italic; }
+  .hero-desc {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #555;
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.9rem 2.2rem;
+    background: var(--terracota);
+    color: white;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: background 0.3s, transform 0.2s;
+    align-self: flex-start;
+    cursor: pointer;
+    border: none;
+  }
+  .btn:hover { background: var(--deep); transform: translateY(-2px); }
+
+  .hero-visual {
+    position: relative;
+    overflow: hidden;
+    background: var(--deep);
+  }
+  .hero-map {
+    width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.7;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #c0624a44 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .map-svg { width: 80%; opacity: 0.25; }
+  .hero-badge {
+    position: absolute; bottom: 2rem; left: 2rem;
+    background: var(--gold);
+    color: var(--deep);
+    padding: 1rem 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    animation: fadeUp 1.2s 0.3s ease both;
+  }
+
+  /* DESTINOS */
+  .section { padding: 5rem 4rem; }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--mist);
+    padding-bottom: 1.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+  }
+  .section-num {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--terracota);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .card {
+    background: white;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeUp 0.8s ease both;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.2s; }
+  .card-img {
+    height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-img-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .card-img-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+  .card-img-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .card-tag {
+    position: absolute; top: 1rem; right: 1rem;
+    background: var(--gold);
+    color: var(--deep);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+  }
+  .card-body { padding: 1.5rem; }
+  .card-country {
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--terracota); margin-bottom: 0.4rem;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+  .card-desc { font-size: 0.85rem; color: #777; line-height: 1.6; }
+
+  /* SOBRE MÍ */
+  .about {
+    background: var(--deep);
+    color: white;
+    padding: 5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .about-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: var(--terracota);
+    opacity: 0.4;
+    line-height: 1;
+  }
+  .about-content {}
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+  }
+  .about-text { font-weight: 300; line-height: 1.9; color: #aaa; font-size: 0.95rem; }
+  .stats {
+    display: flex; gap: 3rem; margin-top: 2rem;
+    border-top: 1px solid #333; padding-top: 2rem;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; color: var(--gold);
+  }
+  .stat-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #666; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 0.75rem; letter-spacing: 2px;
+    text-transform: uppercase; color: #aaa;
+    border-top: 1px solid var(--mist);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">✦ Wanderlust</div>
+  <ul class="nav-links">
+    <li><a href="#">Inicio</a></li>
+    <li><a href="#">Destinos</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Contacto</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">✦ Diario de viajes</p>
+    <h1 class="hero-title">El mundo es<br>demasiado grande<br>para <em>quedarse quieto</em></h1>
+    <p class="hero-desc">Relatos, guías y consejos de un viajero apasionado. Desde rincones escondidos hasta grandes ciudades, aquí encontrarás inspiración para tu próxima aventura.</p>
+    <button class="btn">Explorar destinos</button>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-map">
+      <svg class="map-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="150" r="60" fill="white" opacity="0.3"/>
+        <circle cx="400" cy="200" r="80" fill="white" opacity="0.2"/>
+        <circle cx="600" cy="120" r="50" fill="white" opacity="0.25"/>
+        <circle cx="320" cy="300" r="40" fill="white" opacity="0.15"/>
+        <line x1="200" y1="150" x2="400" y2="200" stroke="white" stroke-width="1" stroke-dasharray="5,5" opacity="0.4"/>
+        <line x1="400" y1="200" x2="600" y2="120" stroke="white" stroke-width="1" stroke-dasharray="5,5" opacity="0.4"/>
+        <circle cx="200" cy="150" r="6" fill="#d4a847"/>
+        <circle cx="400" cy="200" r="6" fill="#d4a847"/>
+        <circle cx="600" cy="120" r="6" fill="#d4a847"/>
+        <text x="210" y="145" fill="white" font-size="12" opacity="0.8">Europa</text>
+        <text x="410" y="195" fill="white" font-size="12" opacity="0.8">Asia</text>
+        <text x="610" y="115" fill="white" font-size="12" opacity="0.8">América</text>
+      </svg>
+    </div>
+    <div class="hero-badge">📍 +30 destinos explorados</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">Destinos destacados</h2>
+    <span class="section-num">01 / Explorar</span>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-img card-img-1">
+        🗼
+        <span class="card-tag">Europa</span>
+      </div>
+      <div class="card-body">
+        <p class="card-country">Francia</p>
+        <h3 class="card-title">París en 5 días</h3>
+        <p class="card-desc">La ciudad del amor, la gastronomía y el arte. Una guía completa para no perderse nada.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img card-img-2">
+        🌸
+        <span class="card-tag">Asia</span>
+      </div>
+      <div class="card-body">
+        <p class="card-country">Japón</p>
+        <h3 class="card-title">Tokio — El futuro es hoy</h3>
+        <p class="card-desc">Tradición y modernidad conviviendo en perfecta armonía. Una experiencia única.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img card-img-3">
+        🏔️
+        <span class="card-tag">América</span>
+      </div>
+      <div class="card-body">
+        <p class="card-country">Perú</p>
+        <h3 class="card-title">Machu Picchu — La ciudad perdida</h3>
+        <p class="card-desc">Uno de los destinos más impresionantes del mundo. Historia, naturaleza y misterio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="about-num">✦</div>
+  <div class="about-content">
+    <h2 class="about-title">Hola, soy [Tu nombre]</h2>
+    <p class="about-text">Soy un apasionado de los viajes que decidió documentar cada aventura. En este blog encontrarás relatos honestos, guías prácticas y consejos reales de alguien que viaja con presupuesto limitado pero ganas infinitas. Aquí no hay viajes perfectos — hay experiencias reales.</p>
+    <div class="stats">
+      <div>
+        <div class="stat-num">30+</div>
+        <div class="stat-label">Países</div>
+      </div>
+      <div>
+        <div class="stat-num">100+</div>
+        <div class="stat-label">Artículos</div>
+      </div>
+      <div>
+        <div class="stat-num">5</div>
+        <div class="stat-label">Años viajando</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Wanderlust · Hecho con ❤️ y muchos kilómetros</p>
+</footer>
+
+</body>
+</html>
